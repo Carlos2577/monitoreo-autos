@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ubicación Móvil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.11.0/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBC5-iaj5ssEkT2rKZJr8ZFV4ZVV3IF3l4",
+      authDomain: "monitoreoautossantamarina.firebaseapp.com",
+      databaseURL: "https://monitoreoautossantamarina-default-rtdb.firebaseio.com",
+      projectId: "monitoreoautossantamarina",
+      storageBucket: "monitoreoautossantamarina.appspot.com",
+      messagingSenderId: "314840134998",
+      appId: "1:314840134998:web:a033202970d776001112f7"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    let movil = "";
+
+    function enviarUbicacion(pos) {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      firebase.database().ref('moviles/' + movil).set({
+        lat: lat,
+        lng: lng,
+        timestamp: Date.now()
+      });
+      alert("Ubicación enviada: " + lat + ", " + lng);
+    }
+
+    function iniciarTracking(nombre) {
+      movil = nombre;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(enviarUbicacion, (error) => {
+          alert("Error obteniendo ubicación: " + error.message);
+        });
+      } else {
+        alert("Geolocalización no soportada");
+      }
+    }
+  </script>
+</head>
+<body>
+  <h2>Seleccioná tu móvil</h2>
+  <button onclick="iniciarTracking('movil1')">Móvil 1 Santamarina</button>
+  <button onclick="iniciarTracking('movil2')">Móvil 2 Santamarina</button>
+  <p>Tu ubicación se está enviando...</p>
+</body>
+</html>
