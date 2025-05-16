@@ -30,18 +30,29 @@
         zoom: 13
       });
 
+      const icons = {
+        movil1: "https://cdn-icons-png.flaticon.com/512/743/743922.png",
+        movil2: "https://cdn-icons-png.flaticon.com/512/743/743930.png"
+      };
+
       const movilesRef = db.ref("moviles");
       movilesRef.on("value", (snapshot) => {
         const data = snapshot.val();
         for (let key in data) {
           const { lat, lng } = data[key];
+          const position = new google.maps.LatLng(lat, lng);
+
           if (markers[key]) {
-            markers[key].setPosition(new google.maps.LatLng(lat, lng));
+            markers[key].setPosition(position);
           } else {
             markers[key] = new google.maps.Marker({
-              position: { lat, lng },
-              map,
-              label: key.toUpperCase()
+              position: position,
+              map: map,
+              title: key.toUpperCase(),
+              icon: {
+                url: icons[key] || null,
+                scaledSize: new google.maps.Size(40, 40)
+              }
             });
           }
         }
