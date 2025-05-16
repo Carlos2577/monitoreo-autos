@@ -1,5 +1,4 @@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
   <title>Ubicación Móvil</title>
@@ -30,17 +29,19 @@
         lng: lng,
         timestamp: Date.now()
       });
-      alert("Ubicación enviada: " + lat + ", " + lng);
+      console.log("Ubicación enviada:", lat, lng);
     }
 
     function iniciarTracking(nombre) {
       movil = nombre;
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(enviarUbicacion, (error) => {
-          alert("Error obteniendo ubicación: " + error.message);
-        });
+        setInterval(() => {
+          navigator.geolocation.getCurrentPosition(enviarUbicacion, (error) => {
+            console.error("Error al obtener ubicación:", error.message);
+          });
+        }, 2000); // Cada 2 segundos
       } else {
-        alert("Geolocalización no soportada");
+        alert("GPS no disponible en este dispositivo.");
       }
     }
   </script>
@@ -49,6 +50,7 @@
   <h2>Seleccioná tu móvil</h2>
   <button onclick="iniciarTracking('movil1')">Móvil 1 Santamarina</button>
   <button onclick="iniciarTracking('movil2')">Móvil 2 Santamarina</button>
-  <p>Tu ubicación se está enviando...</p>
+  <p>Tu ubicación se está enviando cada 2 segundos...</p>
 </body>
 </html>
+
